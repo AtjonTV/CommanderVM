@@ -1,0 +1,3 @@
+# This instruction should stop the CommanderVM
+ign
+hlt,3

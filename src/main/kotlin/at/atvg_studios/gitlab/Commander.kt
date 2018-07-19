@@ -2,18 +2,21 @@ package at.atvg_studios.gitlab
 
 import java.io.File
 
+private var vm:VM = VM(100)
+
 fun main(args: Array<String>) {
     var p = Parser()
     if(args.isNotEmpty())
     {
         if(args[0] != "")
         {
-            if(File(args[0]).exists())
+            var file:File = File(args[0])
+            if(file.exists())
             {
-                var file = File(args[0]).readLines()
-                for (line in file)
+                var f = file.readLines()
+                for (line in f)
                 {
-                    p.Parse(line)
+                    vm.push(p.Parse(line))
                 }
             }else if (args[0] == "-instructions")
             {

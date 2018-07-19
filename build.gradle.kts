@@ -25,3 +25,21 @@ application {
     applicationName = rootProject.name
     mainClassName = "${project.group}.CommanderKt"
 }
+
+val fatJar = task("fatJar", type = Jar::class) {
+    baseName = "${project.name}-fat"
+    manifest {
+        attributes["Main-Class"] = "${project.group}.CommanderKt"
+    }
+    from(
+            configurations.runtime.map {
+                if (it.isDirectory) it else zipTree(it)
+            }
+    )
+    with(tasks["jar"] as CopySpec)
+}
+tasks {
+    "build" {
+        dependsOn(fatJar)
+    }
+}
