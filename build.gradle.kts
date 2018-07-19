@@ -6,7 +6,8 @@ plugins {
 }
 
 group = "at.atvg_studios.gitlab"
-version = "1.0-SNAPSHOT"
+// The Version is defined as Year-Month-Day<-Revision> (Revision is optional)
+version = "18.4.19"
 
 repositories {
     mavenCentral()
