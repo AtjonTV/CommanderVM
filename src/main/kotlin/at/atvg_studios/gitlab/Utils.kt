@@ -43,15 +43,17 @@ class Utils {
         }
 
         fun equal(a: Any, b: Int, isHex: Boolean): Boolean {
-            if (isHex)
-                return equal(a, "0x" + Integer.toHexString(b))
+            return if (isHex)
+                equal(a, "0x" + Integer.toHexString(b))
             else
-                return equal(a, b)
+                equal(a, b)
         }
 
         fun compareWithInstruction(a:Any, i:InstructionSet): Boolean
         {
-            if(equal(a,i.name) || equal(a,i.hex,true))
+            if(a.toString().equals(i.name,ignoreCase = true)
+                    || (a.toString().equals("0x0" + Integer.toHexString(i.hex),ignoreCase = true)
+                            || a.toString().equals("0x" + Integer.toHexString(i.hex),ignoreCase = true)))
                 return true
             return false
         }

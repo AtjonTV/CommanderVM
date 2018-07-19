@@ -47,10 +47,9 @@ class VM {
     }
 
     fun push(inst: Instruction) {
-        if (applicationMemory.size < applicationMemoryMax) {
-            applicationMemory.add(applicationMemory.size, inst)
-        } else
-            throw Vm_OutOfRam("Bound on Limit '$applicationMemoryMax'")
+        if (applicationMemory.size >= applicationMemoryMax)
+            throw Vm_OutOfRam("Application Memory '$applicationMemoryMax'")
+        applicationMemory.add(applicationMemory.size, inst)
     }
 
     fun pop() {
@@ -96,6 +95,8 @@ class VM {
                 {
                     if(DEBUG)
                         println("Puting ${inst.getArgs()[1]} in ${inst.getArgs()[0]}")
+                    if(dataMemory.size >= dataMemoryMax)
+                        throw Vm_OutOfRam("Data Memory '$dataMemoryMax'")
                     try {
                         if(!inst.getArgs()[0].contains("."))
                         {

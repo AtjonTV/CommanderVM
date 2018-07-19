@@ -7,7 +7,7 @@ Please don't expect this VM to work as intended!
 
 This VM is not make to run huge things or to be high performand!
 
-The VM was made to play with Assembly styled FileSystem functions
+The VM got a Assembly like language called ComCode 
 
 # ComCode
 
@@ -23,6 +23,35 @@ The commands marked with `✕` are not implemented yet.
 ✕ JIF(0x05), // JIF: 0x05,0x00,$a; Jumps to position 0 of applicationMemory if top of register a is 0 or 1
 ✔ IGN(0xFF)  // IGN: 0xFF; Does nothing
 ```
+
+# ComCode Compiler / Commander Compiler
+The latest version of CommanderVM has a build in Compiler and Decompiler for ComCode.
+
+All instructions of ComCode have a Hex value that represents the instruction.
+
+The Compiler will replace the Text (e.g. `hlt`) with its Hex value (e.g. `0x00`).
+
+The Decompiler does the same thing just in reverse, it replaces the Hex wit the Text.
+
+This:
+
+```
+put,$a,1
+put,$a,5
+pop,$a.0
+hlt,0
+```
+
+will become this:
+
+```
+0x01,$a,1
+0x01,$a,5
+0x03,$a.0
+0x00,0
+```
+
+on Compilation, and the reverse on Decompilation
 
 # License
 OSPL v1 (Open Source Project License Version 1.3 by ATVG-Studios)
