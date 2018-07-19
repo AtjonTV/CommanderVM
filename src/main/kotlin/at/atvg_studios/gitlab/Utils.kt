@@ -48,5 +48,12 @@ class Utils {
             else
                 return equal(a, b)
         }
+
+        fun compareWithInstruction(a:Any, i:InstructionSet): Boolean
+        {
+            if(equal(a,i.name) || equal(a,i.hex,true))
+                return true
+            return false
+        }
     }
 }

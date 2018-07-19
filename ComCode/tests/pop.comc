@@ -1,0 +1,3 @@
+# Try to POP register a's top
+pop,$a.0
+hlt,0

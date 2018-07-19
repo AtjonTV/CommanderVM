@@ -29,11 +29,11 @@ package at.atvg_studios.gitlab
  */
 
 enum class InstructionSet(var hex: Int) {
-    HLT(0x00),
-    MTD(0x01),
-    FEX(0x02),
-    DEX(0x03),
-    FRM(0x04),
-    DRM(0x05),
-    IGN(0xFF)
+    HLT(0x00), // HLT: 0x00; Stops the VM
+    PUT(0x01), // PUT: 0x01,$a,0x02; Puts 2 at the top of register a
+    COM(0x02), // COM: 0x02,$a.2,$a.3,$a; Compares register a pos 2 with register a pos 3 and stores 0 or 1 at top of register a
+    POP(0x03), // POP: 0x03,$a; Removes the top of register a
+    JMP(0x04), // JMP: 0x04,0x00; Jumps top position 0 of applicationMemory
+    JIF(0x05), // JIF: 0x05,0x00,$a; Jumps to position 0 of applicationMemory if top of register a is 0 or 1
+    IGN(0xFF)  // IGN: 0xFF; Does nothing
 }

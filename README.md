@@ -11,14 +11,17 @@ The VM was made to play with Assembly styled FileSystem functions
 
 # ComCode
 
+This is the ComCode, the with `✔` marked commands are already part of the VM.  
+The commands marked with `✕` are not implemented yet.
+
 ```
-HLT 0x00 - Halt the VM
-MTD 0x01 - Move to Directory
-FEX 0x02 - Check if File exists
-DEX 0x03 - Check if Directory Exists
-FRM 0x04 - Remove File
-DRM 0x05 - Remove Directory
-IGN 0xFF - Do nothing
+✔ HLT(0x00), // HLT: 0x00; Stops the VM
+✔ PUT(0x01), // PUT: 0x01,$a,0x02; Puts 2 at the top of register a
+✕ COM(0x02), // COM: 0x02,$a.2,$a.3,$a; Compares register a pos 2 with register a pos 3 and stores 0 or 1 at top of register a
+✔ POP(0x03), // POP: 0x03,$a; Removes the top of register a
+✕ JMP(0x04), // JMP: 0x04,0x00; Jumps top position 0 of applicationMemory
+✕ JIF(0x05), // JIF: 0x05,0x00,$a; Jumps to position 0 of applicationMemory if top of register a is 0 or 1
+✔ IGN(0xFF)  // IGN: 0xFF; Does nothing
 ```
 
 # License

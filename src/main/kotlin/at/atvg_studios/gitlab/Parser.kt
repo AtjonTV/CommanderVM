@@ -37,13 +37,31 @@ class Parser {
         var set = line.split(",")
 
         if (set.size == 1) {
-            if (Utils.equal(set[0], InstructionSet.HLT.name) || Utils.equal(set[0], InstructionSet.HLT.hex, true))
+            if (Utils.compareWithInstruction(set[0], InstructionSet.HLT))
                 return Instruction(InstructionSet.HLT)
-            if (Utils.equal(set[0], InstructionSet.IGN.name) || Utils.equal(set[0], InstructionSet.IGN.hex, true))
+            if (Utils.compareWithInstruction(set[0], InstructionSet.IGN))
                 return Instruction(InstructionSet.IGN)
         } else if (set.size == 2) {
-            if (Utils.equal(set[0], InstructionSet.HLT.name) || Utils.equal(set[0], InstructionSet.HLT.hex, true))
+            if (Utils.compareWithInstruction(set[0], InstructionSet.HLT))
                 return Instruction(InstructionSet.HLT, Array(1) { set[1] })
+            if (Utils.compareWithInstruction(set[0], InstructionSet.POP))
+            {
+                if(set[1].startsWith("\$a."))
+                {
+                    return Instruction(InstructionSet.POP, Array(1){set[1].replace("\$", "")})
+                }
+                return Instruction(InstructionSet.HLT, Array(1){"P02"}) // Could not find register
+            }
+        } else if (set.size == 3)
+        {
+            if(Utils.compareWithInstruction(set[0], InstructionSet.PUT))
+            {
+                if(set[1].startsWith("\$a"))
+                {
+                    return Instruction(InstructionSet.PUT, arrayOf(set[1].replace("\$",""), set[2]))
+                }
+                return Instruction(InstructionSet.HLT, Array(1){"P02"}) // Could not find register
+            }
         }
 
         return Instruction(InstructionSet.IGN)

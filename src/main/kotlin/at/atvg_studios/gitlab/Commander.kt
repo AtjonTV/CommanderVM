@@ -30,7 +30,7 @@ package at.atvg_studios.gitlab
 
 import java.io.File
 
-private var vm: VM = VM(100)
+private var vm: VM = VM(50,1)
 
 fun main(args: Array<String>) {
     var p = Parser()
@@ -42,6 +42,7 @@ fun main(args: Array<String>) {
                 for (line in f) {
                     vm.push(p.Parse(line))
                 }
+                vm.execute()
             } else if (args[0] == "-instructions") {
                 println(InstructionSet.HLT.name + " | 0x" + Integer.toHexString(InstructionSet.HLT.hex))
                 println(InstructionSet.IGN.name + " | 0x" + Integer.toHexString(InstructionSet.IGN.hex))

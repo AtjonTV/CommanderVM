@@ -29,37 +29,38 @@ package at.atvg_studios.gitlab
  */
 
 class VM {
-    private var ram_size: Int = 0
-    private var ram_max: Int = 0
-    private var ram: MutableList<Instruction> = ArrayList<Instruction>()
 
-    constructor(ram: Int) {
-        ram_max = ram
-    }
+    private var DEBUG:Boolean=false
 
-    constructor(ram_s: Int, ram: MutableList<Instruction>) {
-        ram_max = ram_s
-        ram_size = ram.size
-        this.ram = ram
+    /**
+     * ApplicationMemory defines how many Instructions can store and execute
+     */
+    private var applicationMemoryMax: Int = 0
+    private var applicationMemory: MutableList<Instruction> = ArrayList<Instruction>()
+
+    private var dataMemoryMax: Int = 0
+    private var dataMemory: MutableMap<String, Any> = HashMap<String, Any>()
+
+    constructor(application_memory_max: Int, register_a_max: Int) {
+        applicationMemoryMax = application_memory_max
+        dataMemoryMax = register_a_max
     }
 
     fun push(inst: Instruction) {
-        if (ram_size < ram_max) {
-            ram.add(ram.size, inst)
-            ram_size = ram.size + 1 // Add one to be safe
-            execute()
+        if (applicationMemory.size < applicationMemoryMax) {
+            applicationMemory.add(applicationMemory.size, inst)
         } else
-            throw Vm_OutOfRam("Bound on Limit '$ram_max'")
+            throw Vm_OutOfRam("Bound on Limit '$applicationMemoryMax'")
     }
 
     fun pop() {
-        ram.removeAt(ram_size - 2) // Subtract two due to extra and indexing
+        applicationMemory.removeAt(applicationMemory.size - 1)
     }
 
     fun execute() {
         var inst: Instruction?
-        for (i in 0 until ram_size - 1) {
-            inst = ram[i]
+        for (i in 0 until applicationMemory.size) {
+            inst = applicationMemory[i]
             if (inst.getCmd() == InstructionSet.HLT) {
                 if (inst.getArgs().size == 1 && inst.getArgs()[0].isNotEmpty()) {
                     throw Vm_Halted("Instruction; Halt Code " + inst.getArgs()[0])
@@ -68,7 +69,66 @@ class VM {
                 }
             }
             if (inst.getCmd() == InstructionSet.IGN)
-                ram.removeAt(i)
+            {
+
+            }
+            if(inst.getCmd() == InstructionSet.POP)
+            {
+                if(inst.getArgs().size == 1 && inst.getArgs()[0].isNotEmpty())
+                {
+                    if(DEBUG)
+                        println("Poping ${inst.getArgs()[0]}")
+                    try {
+                        dataMemory.remove(inst.getArgs()[0])
+                        if(DEBUG)
+                            println(dataMemory)
+                    }catch (e:Exception)
+                    {
+                        e.printStackTrace()
+                    }
+                }
+                else
+                    throw Vm_Halted("POP Underload")
+            }
+            if(inst.getCmd() == InstructionSet.PUT)
+            {
+                if(inst.getArgs().size == 2 && inst.getArgs()[0].isNotEmpty() && inst.getArgs()[1].isNotEmpty())
+                {
+                    if(DEBUG)
+                        println("Puting ${inst.getArgs()[1]} in ${inst.getArgs()[0]}")
+                    try {
+                        if(!inst.getArgs()[0].contains("."))
+                        {
+                            dataMemory["a."+dataMemory.size.toString()] = inst.getArgs()[1]
+                        }
+                        else
+                        {
+                            dataMemory[inst.getArgs()[0]] = inst.getArgs()[1]
+                        }
+                        if(DEBUG)
+                            println(dataMemory)
+                    }catch (e:Exception)
+                    {
+                        e.printStackTrace()
+                    }
+                }
+                else
+                    throw Vm_Halted("PUT Underload")
+            }
         }
+    }
+
+    /*
+     * The following functions allow loading and clearing of the VM internal storages
+     */
+    fun Vm_LoadApplicationMemory(application_memory_max: Int, application_memory: MutableList<Instruction>) {
+        applicationMemoryMax = application_memory_max
+        applicationMemory = application_memory
+    }
+
+    fun Vm_LoadRegisterA(data_memory_max:Int, data_memory:MutableMap<String, Any>)
+    {
+        dataMemoryMax=data_memory_max
+        dataMemory=data_memory
     }
 }
