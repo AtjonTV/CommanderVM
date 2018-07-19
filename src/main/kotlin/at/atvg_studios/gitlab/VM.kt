@@ -43,15 +43,12 @@ class VM
             inst = ram[i]
             if(inst.getCmd() == InstructionSet.HLT)
             {
-                if(inst.getArgs() != null)
+                if(inst.getArgs().size == 1 && inst.getArgs()[0].isNotEmpty())
                 {
-                    if(inst.getArgs().size == 1)
-                    {
-                        throw Vm_Halted("Instruction; Halt Code "+inst.getArgs()[0])
-                    }else
-                    {
-                        throw Vm_Halted("Instruction")
-                    }
+                    throw Vm_Halted("Instruction; Halt Code "+inst.getArgs()[0])
+                }else
+                {
+                    throw Vm_Halted("Instruction")
                 }
             }
             if(inst.getCmd() == InstructionSet.IGN)
