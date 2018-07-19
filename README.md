@@ -1,0 +1,49 @@
+# CommanderVM
+CommanderVM is a Kotlin/JVM written VM that executes "ComCode".
+
+# Disclaimer
+This is the first VM we wrote and the first Kotlin/JVM project we do.
+Please don't expect this VM to work as intended!
+
+This VM is not make to run huge things or to be high performand!
+
+The VM was made to play with Assembly styled FileSystem functions
+
+# ComCode
+
+```
+HLT 0x00 - Halt the VM
+MTD 0x01 - Move to Directory
+FEX 0x02 - Check if File exists
+DEX 0x03 - Check if Directory Exists
+FRM 0x04 - Remove File
+DRM 0x05 - Remove Directory
+IGN 0xFF - Do nothing
+```
+
+# License
+OSPL v1 (Open Source Project License Version 1.3 by ATVG-Studios)
+
+Copyright (c) 2015-2018 Thomas Obernosterer (ATVG-Studios)
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish,
+distribute and sublicense the Software
+(Selling the Software is punishable for the Person selling. This may result in a lawsuit!),
+and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+[This License was Copied from its original website: http://ospl.atvg-studios.at]
