@@ -13,17 +13,15 @@ cache:
   paths:
   - .gradle/
 
-after_script:
-- echo "Code Size"
-- find src/main \( -name '*.java' -or -name '*.kt' \) | xargs wc -l | tail -1
-
 build:
   stage: build
   script:
   - ./gradlew build
-  - ./ktlint --reporter=plain --reporter=checkstyle,output=ktlint-report-in-checkstyle-format.xml
+  - ./ktlint --reporter=plain --reporter=checkstyle,output=ktlint-report.xml
+  - echo "Code Size"
+  - find src/main \( -name '*.java' -or -name '*.kt' \) | xargs wc -l | tail -1
   artifacts:
     paths:
     - build/distributions/*.*
     - build/libs/*.*
-    - ktlint-report-in-checkstyle-format.xml
+    - ktlint-report.xml
