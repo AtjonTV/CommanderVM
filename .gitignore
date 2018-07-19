@@ -38,5 +38,4 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 /out/
-.idea
 ktlint-report*.xml
