@@ -31,6 +31,8 @@ package at.atvg_studios.gitlab
 import java.io.File
 
 private var vm: VM = VM(50,100)
+private var version:String = "18.7.20"
+private var date:String="20.07.2018"
 
 fun main(args: Array<String>) {
     var p = Parser()
@@ -54,7 +56,7 @@ fun main(args: Array<String>) {
                     if(args[i] == "-help")
                     {
                         println("+--------------------------------------------------+")
-                        println("|   CommanderVM v18.7.19 by Thomas Obernosterer    |")
+                        println("|   CommanderVM v$version by Thomas Obernosterer    |")
                         println("+--------------------------------------------------+")
                         println("|  -instructions => Show Instructions              |")
                         println("|  -help => Show this help                         |")
@@ -68,10 +70,10 @@ fun main(args: Array<String>) {
                     if(args[i] == "-version")
                     {
                         println("+---------------------------------+")
-                        println("|      CommanderVM v18.7.19       |")
+                        println("|      CommanderVM v$version       |")
                         println("+---------------------------------+")
-                        println("|   Version: 18.7.19              |")
-                        println("|   Date:    19.07.2018           |")
+                        println("|   Version: $version              |")
+                        println("|   Date:    $date           |")
                         println("+---------------------------------+")
                         println("|   Author: Thomas Obernosterer   |")
                         println("|   Copyright: 2018 ATVG-Studios  |")
