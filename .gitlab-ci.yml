@@ -31,3 +31,6 @@ lint:
   stage: lint
   script:
   - ./ktlint --reporter=plain --reporter=checkstyle,output=ktlint-report-in-checkstyle-format.xml
+  artifacts:
+    paths:
+    - klint-report*.xml
