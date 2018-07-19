@@ -2,10 +2,12 @@ image: java:8-jdk
 
 stages:
 - build
+- lint
 
 before_script:
 - export GRADLE_USER_HOME=$(pwd)/.gradle
 - chmod +x ./gradlew
+- chmod +x ./ktlint
 
 cache:
   key: ${CI_PROJECT_ID}
@@ -24,3 +26,8 @@ build:
     paths:
     - build/distributions/*.*
     - build/libs/*.*
+
+lint:
+  stage: lint
+  script:
+  - ./ktlint --reporter=plain --reporter=checkstyle,output=ktlint-report-in-checkstyle-format.xml
