@@ -28,16 +28,24 @@ package at.atvg_studios.gitlab
  * [This License was Copied from its original website: http://ospl.atvg-studios.at]
  */
 
+
+/**
+    The VM executes Instructions and Handles the application Storage
+*/
 class VM {
 
+    // DEBUG enables or disables debuging prints
     private var DEBUG:Boolean=false
 
     /**
-     * ApplicationMemory defines how many Instructions can store and execute
+     * ApplicationMemory defines how many Instructions can be stored and execute
      */
     private var applicationMemoryMax: Int = 0
     private var applicationMemory: MutableList<Instruction> = ArrayList<Instruction>()
 
+    /**
+     * DataMemory defines how many Variabls can be stored
+     */
     private var dataMemoryMax: Int = 0
     private var dataMemory: MutableMap<String, Any> = HashMap<String, Any>()
 
@@ -46,38 +54,64 @@ class VM {
         dataMemoryMax = register_a_max
     }
 
+    /**
+     * Push adds a Instruction to the applciationMemory
+     */
     fun push(inst: Instruction) {
         if (applicationMemory.size >= applicationMemoryMax)
             throw Vm_OutOfRam("Application Memory '$applicationMemoryMax'")
         applicationMemory.add(applicationMemory.size, inst)
     }
 
+    /**
+     * Pop removes the top of the applicationMemory
+     */
     fun pop() {
         applicationMemory.removeAt(applicationMemory.size - 1)
     }
 
+    /**
+     * Execute runns through all the Instructions in applicationMemory, and executes them
+     */
     fun execute() {
         var inst: Instruction?
+        /*
+            For each Instruction in the applicationMemory
+        */
         for (i in 0 until applicationMemory.size) {
             inst = applicationMemory[i]
+            /*
+                When the Instruction is HLT, STOP!
+            */
             if (inst.getCmd() == InstructionSet.HLT) {
+                // Check if a error code in the args is set
                 if (inst.getArgs().size == 1 && inst.getArgs()[0].isNotEmpty()) {
                     throw Vm_Halted("Instruction; Halt Code " + inst.getArgs()[0])
                 } else {
                     throw Vm_Halted("Instruction")
                 }
             }
+
+            /*
+                When the Instruction is IGN, Do NOTHING!
+            */
             if (inst.getCmd() == InstructionSet.IGN)
             {
-
+                // DO NOTHING
             }
+
+            /*
+                When the Instruction is POP, either take the top or a index from dataMemory
+            */
             if(inst.getCmd() == InstructionSet.POP)
             {
+                // Check if an argument is given
                 if(inst.getArgs().size == 1 && inst.getArgs()[0].isNotEmpty())
                 {
                     if(DEBUG)
                         println("Poping ${inst.getArgs()[0]}")
                     try {
+                        // Try to POP the index
                         dataMemory.remove(inst.getArgs()[0])
                         if(DEBUG)
                             println(dataMemory)
@@ -89,15 +123,22 @@ class VM {
                 else
                     throw Vm_Halted("POP Underload")
             }
+
+            /*
+                When the Instruction is PUT, take a register and value
+            */
             if(inst.getCmd() == InstructionSet.PUT)
             {
+                // Check if a register and value is set
                 if(inst.getArgs().size == 2 && inst.getArgs()[0].isNotEmpty() && inst.getArgs()[1].isNotEmpty())
                 {
                     if(DEBUG)
                         println("Puting ${inst.getArgs()[1]} in ${inst.getArgs()[0]}")
+                    // Check if dataMemory is full
                     if(dataMemory.size >= dataMemoryMax)
                         throw Vm_OutOfRam("Data Memory '$dataMemoryMax'")
                     try {
+                        // When a index is provided
                         if(!inst.getArgs()[0].contains("."))
                         {
                             dataMemory["a."+dataMemory.size.toString()] = inst.getArgs()[1]
@@ -122,11 +163,17 @@ class VM {
     /*
      * The following functions allow loading and clearing of the VM internal storages
      */
+    /**
+        Vm_LoadApplicationMemory allows to load a full stack of instructions into applicationMemory
+    */
     fun Vm_LoadApplicationMemory(application_memory_max: Int, application_memory: MutableList<Instruction>) {
         applicationMemoryMax = application_memory_max
         applicationMemory = application_memory
     }
 
+    /**
+        Vm_LoadRegisterA allows to load a full stack of values into dataMemory's A stack
+    */
     fun Vm_LoadRegisterA(data_memory_max:Int, data_memory:MutableMap<String, Any>)
     {
         dataMemoryMax=data_memory_max
