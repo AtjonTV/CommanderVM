@@ -50,7 +50,20 @@ class Parser {
                 {
                     return Instruction(InstructionSet.POP, Array(1){set[1].replace("\$", "")})
                 }
+                else if(set[1].startsWith("\$a"))
+                {
+                    return Instruction(InstructionSet.POP, Array(1){""})
+                }
                 return Instruction(InstructionSet.HLT, Array(1){"P02"}) // Could not find register
+            }
+            if(Utils.compareWithInstruction(set[0], InstructionSet.JMP))
+            {
+                if(set[1].startsWith("0x"))
+                {
+                    var index = set[1].replace("0x", "").toInt()
+                    return Instruction(InstructionSet.JMP, Array(1){index.toString()})
+                }
+                return Instruction(InstructionSet.HLT, Array(1){"P03"}) // Could not parse index
             }
         } else if (set.size == 3)
         {

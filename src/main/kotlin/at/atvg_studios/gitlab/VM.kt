@@ -35,7 +35,8 @@ package at.atvg_studios.gitlab
 class VM {
 
     // DEBUG enables or disables debuging prints
-    private var DEBUG:Boolean=false
+    private var DEBUG:Boolean=true
+    private var applicationStackBegin:Int = 0
 
     /**
      * ApplicationMemory defines how many Instructions can be stored and execute
@@ -78,7 +79,7 @@ class VM {
         /*
             For each Instruction in the applicationMemory
         */
-        for (i in 0 until applicationMemory.size) {
+        for (i in applicationStackBegin until applicationMemory.size) {
             inst = applicationMemory[i]
             /*
                 When the Instruction is HLT, STOP!
@@ -120,6 +121,17 @@ class VM {
                         e.printStackTrace()
                     }
                 }
+                else if (inst.getArgs().size == 1)
+                {
+                    if(DEBUG)
+                        println("Poping a.${dataMemory.size-1}")
+                    try {
+                        dataMemory.remove("a.${dataMemory.size}")
+                    }catch (e:Exception)
+                    {
+                        e.printStackTrace()
+                    }
+                }
                 else
                     throw Vm_Halted("POP Underload")
             }
@@ -136,7 +148,11 @@ class VM {
                         println("Puting ${inst.getArgs()[1]} in ${inst.getArgs()[0]}")
                     // Check if dataMemory is full
                     if(dataMemory.size >= dataMemoryMax)
+                    {
+                        dataMemory.clear()
+                        applicationStackBegin=0
                         throw Vm_OutOfRam("Data Memory '$dataMemoryMax'")
+                    }
                     try {
                         // When a index is provided
                         if(!inst.getArgs()[0].contains("."))
@@ -157,6 +173,29 @@ class VM {
                 else
                     throw Vm_Halted("PUT Underload")
             }
+
+            /*
+                When the Instruction is JMP, take a index
+             */
+            if(inst.getCmd() == InstructionSet.JMP)
+            {
+                // Check if index is set
+                if(inst.getArgs().size == 1 && inst.getArgs()[0].isNotEmpty())
+                {
+                    if(DEBUG)
+                        println("Jumping to '${inst.getArgs()[0]}'")
+                    try{
+                        applicationStackBegin = inst.getArgs()[0].toInt()
+                        execute()
+                        break
+                    }catch (e:Exception)
+                    {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            println(dataMemory)
         }
     }
 

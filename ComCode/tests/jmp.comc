@@ -1,0 +1,8 @@
+ign
+ign
+put,$a,2
+ign
+ign
+pop,$a
+jmp,0x02
+hlt,1
