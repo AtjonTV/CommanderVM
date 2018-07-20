@@ -1,8 +1,4 @@
-ign
-ign
 put,$a,2
-ign
-ign
 pop,$a
-jmp,0x02
+jmp,0x00
 hlt,1

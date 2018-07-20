@@ -76,6 +76,10 @@ class VM {
      */
     fun execute() {
         var inst: Instruction?
+
+        if(applicationStackBegin == -1)
+            System.exit(1)
+
         /*
             For each Instruction in the applicationMemory
         */
@@ -149,8 +153,7 @@ class VM {
                     // Check if dataMemory is full
                     if(dataMemory.size >= dataMemoryMax)
                     {
-                        dataMemory.clear()
-                        applicationStackBegin=0
+                        applicationStackBegin = -1
                         throw Vm_OutOfRam("Data Memory '$dataMemoryMax'")
                     }
                     try {
