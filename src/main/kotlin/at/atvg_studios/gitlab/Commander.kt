@@ -29,12 +29,44 @@ package at.atvg_studios.gitlab
  */
 
 import java.io.File
+import java.security.Timestamp
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.*
+import java.util.jar.JarFile
+import java.util.jar.Manifest
 
 private var vm: VM = VM(50,100)
-private var version:String = "18.7.20"
-private var date:String="20.07.2018"
+private var version:String = "18.7.21"
+private var build: Long = 0
+private var date:String= Date().toString()
+
+fun loadVersion()
+{
+    var files = File(System.getProperty("user.dir")).listFiles()
+    for(i in 0 until files.size)
+    {
+        if(files[i].name == System.getProperty("java.class.path"))
+        {
+            var jar = JarFile(files[i])
+            version = jar.manifest.mainAttributes.getValue("Implementation-Version")
+            build = jar.manifest.mainAttributes.getValue("Implementation-Build").toLong()
+            var iDate = Instant.ofEpochMilli(jar.manifest.mainAttributes.getValue("Implementation-Date").toLong())
+            date = DateTimeFormatter
+                    .ofPattern("dd.MM.yyyy")
+                    .withZone(ZoneOffset.UTC)
+                    .format(iDate)
+        }
+    }
+}
 
 fun main(args: Array<String>) {
+
+    loadVersion()
+
     var p = Parser()
     if (args.isNotEmpty()) {
         for(i in 0 until args.size)
@@ -73,6 +105,40 @@ fun main(args: Array<String>) {
                         println("|      CommanderVM v$version       |")
                         println("+---------------------------------+")
                         println("|   Version: $version              |")
+                        if(build in 1..9)
+                            println("|   Build:   $build                    |")
+                        else if(build in 10..99)
+                            println("|   Build:   $build                   |")
+                        else if(build in 100..999)
+                            println("|   Build:   $build                  |")
+                        else if(build in 1000..9999)
+                            println("|   Build:   $build                 |")
+                        else if(build in 10000..99999)
+                            println("|   Build:   $build                |")
+                        else if(build in 100000..999999)
+                            println("|   Build:   $build               |")
+                        else if(build in 1000000..9999999)
+                            println("|   Build:   $build              |")
+                        else if(build in 10000000..99999999)
+                            println("|   Build:   $build             |")
+                        else if(build in 100000000..999999999)
+                            println("|   Build:   $build            |")
+                        else if(build in 1000000000..9999999999)
+                            println("|   Build:   $build           |")
+                        else if(build in 10000000000..99999999999)
+                            println("|   Build:   $build          |")
+                        else if(build in 100000000000..999999999999)
+                            println("|   Build:   $build         |")
+                        else if(build in 1000000000000..9999999999999)
+                            println("|   Build:   $build        |")
+                        else if(build in 10000000000000..99999999999999)
+                            println("|   Build:   $build       |")
+                        else if(build in 100000000000000..999999999999999)
+                            println("|   Build:   $build      |")
+                        else if(build in 1000000000000000..9999999999999999)
+                            println("|   Build:   $build     |")
+                        else
+                            println("|   Build:   $build    |")
                         println("|   Date:    $date           |")
                         println("+---------------------------------+")
                         println("|   Author: Thomas Obernosterer   |")
@@ -134,7 +200,8 @@ fun main(args: Array<String>) {
                     if (file.exists()) {
                         var f = file.readLines()
                         for (line in f) {
-                            vm.push(p.Parse(line))
+                            var i = p.Parse(line)
+                            vm.push(i)
                         }
                         vm.execute()
                     } else

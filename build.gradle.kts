@@ -7,7 +7,8 @@ plugins {
 
 group = "at.atvg_studios.gitlab"
 // The Version is defined as Year-Month-Day<-Revision> (Revision is optional)
-version = "18.7.20"
+version = "18.7.21"
+var build = getBuildCode()
 
 repositories {
     mavenCentral()
@@ -15,6 +16,7 @@ repositories {
 
 dependencies {
     compile(kotlin("stdlib-jdk8"))
+    compile("com.google.code.gson:gson:2.8.5")
 }
 
 tasks.withType<KotlinCompile> {
@@ -27,9 +29,12 @@ application {
 }
 
 val fatJar = task("fatJar", type = Jar::class) {
-    baseName = "${project.name}-fat"
+    baseName = "${project.name}VM"
     manifest {
         attributes["Main-Class"] = "${project.group}.CommanderKt"
+        attributes["Implementation-Version"] = "$version"
+        attributes["Implementation-Build"] = "$build"
+        attributes["Implementation-Date"] = System.currentTimeMillis()
     }
     from(
             configurations.runtime.map {
@@ -42,4 +47,12 @@ tasks {
     "build" {
         dependsOn(fatJar)
     }
+}
+
+fun getBuildCode(): Long
+{
+    var z = File("build.v").readText().toLong()
+    z++
+    File("build.v").writeText(z.toString())
+    return z--
 }

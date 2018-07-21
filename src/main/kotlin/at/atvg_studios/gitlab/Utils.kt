@@ -57,5 +57,34 @@ class Utils {
                 return true
             return false
         }
+
+        fun exit(type: Int, msg: String)
+        {
+            when(type)
+            {
+                1 -> {
+                    println("CommanderVM was Halted: Instruction;")
+                }
+                2 -> {
+                    println("CommanderVM was Halted: Instruction; Halt Code $msg")
+                }
+                3 -> {
+                    println("CommanderVM Out of Ram: $msg")
+                    println("CommanderVM was Halted!")
+                }
+                4 -> {
+                    println("CommanderVM File not Found: $msg")
+                    println("CommanderVM was Halted!")
+                }
+                5 -> {
+                    println("CommanderVM JMP Loop: $msg")
+                    println("CommanderVM was Halted!")
+                }
+                else -> {
+                    println("CommanderVM was Halted: Unknown;")
+                }
+            }
+            System.exit(1)
+        }
     }
 }

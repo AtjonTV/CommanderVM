@@ -1,5 +1,8 @@
 package at.atvg_studios.gitlab
 
+import com.google.gson.Gson
+import jdk.nashorn.internal.parser.JSONParser
+
 /**
  * OSPL v1 (Open Source Project License Version 1.3 by ATVG-Studios)
  *
@@ -50,6 +53,12 @@ class VM {
     private var dataMemoryMax: Int = 0
     private var dataMemory: MutableMap<String, Any> = HashMap<String, Any>()
 
+    /**
+     * JumpMax defines how often a JMP instruction can be executed
+     */
+    private var jmpMax: Int = 30
+    private var jmpCount: Int = 0
+
     constructor(application_memory_max: Int, register_a_max: Int) {
         applicationMemoryMax = application_memory_max
         dataMemoryMax = register_a_max
@@ -77,9 +86,6 @@ class VM {
     fun execute() {
         var inst: Instruction?
 
-        if(applicationStackBegin == -1)
-            System.exit(1)
-
         /*
             For each Instruction in the applicationMemory
         */
@@ -91,9 +97,9 @@ class VM {
             if (inst.getCmd() == InstructionSet.HLT) {
                 // Check if a error code in the args is set
                 if (inst.getArgs().size == 1 && inst.getArgs()[0].isNotEmpty()) {
-                    throw Vm_Halted("Instruction; Halt Code " + inst.getArgs()[0])
+                    Utils.exit(2, inst.getArgs()[0])
                 } else {
-                    throw Vm_Halted("Instruction")
+                    Utils.exit(1, "")
                 }
             }
 
@@ -130,7 +136,7 @@ class VM {
                     if(DEBUG)
                         println("Poping a.${dataMemory.size-1}")
                     try {
-                        dataMemory.remove("a.${dataMemory.size}")
+                        dataMemory.remove("a.${dataMemory.size-1}")
                     }catch (e:Exception)
                     {
                         e.printStackTrace()
@@ -153,8 +159,7 @@ class VM {
                     // Check if dataMemory is full
                     if(dataMemory.size >= dataMemoryMax)
                     {
-                        applicationStackBegin = -1
-                        throw Vm_OutOfRam("Data Memory '$dataMemoryMax'")
+                        Utils.exit(3, "Data Memory '$dataMemoryMax'")
                     }
                     try {
                         // When a index is provided
@@ -188,18 +193,40 @@ class VM {
                     if(DEBUG)
                         println("Jumping to '${inst.getArgs()[0]}'")
                     try{
-                        applicationStackBegin = inst.getArgs()[0].toInt()
-                        execute()
-                        break
+                        jmpCount++
+                        if(jmpCount<jmpMax)
+                        {
+                            applicationStackBegin = inst.getArgs()[0].toInt()
+                            execute()
+                            break
+                        }
+                        else
+                            Utils.exit(5,"Jump nr. $jmpCount to ${inst.getArgs()[0]}")
                     }catch (e:Exception)
                     {
                         e.printStackTrace()
                     }
                 }
             }
-
-            println(dataMemory)
         }
+    }
+
+    fun dump(): String
+    {
+        var map = HashMap<String, Any>()
+        map["dataMemory"] = dataMemory
+        map["applicationMemory"] = applicationMemory
+        map["jmpCount"] = jmpCount
+        map["applicationStackBegin"] = applicationStackBegin
+        return Gson().toJson(map)
+    }
+
+    fun clear()
+    {
+        dataMemory.clear()
+        applicationMemory.clear()
+        jmpCount = 0
+        applicationStackBegin = 0
     }
 
     /*
