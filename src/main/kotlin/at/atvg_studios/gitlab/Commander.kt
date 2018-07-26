@@ -88,13 +88,14 @@ fun main(args: Array<String>) {
                     if(args[i] == "-help")
                     {
                         println("+--------------------------------------------------+")
-                        println("|   CommanderVM v$version by Thomas Obernosterer    |")
+                        println("|   CommanderVM v$version by Thomas Obernosterer  |")
                         println("+--------------------------------------------------+")
                         println("|  -instructions => Show Instructions              |")
                         println("|  -help => Show this help                         |")
                         println("|  -version => Show current version                |")
                         println("|  -decompile <hexFile> -o <txtFile> => Hex to Txt |")
                         println("|  -compile <txtFile> -o <hexFile> => Txt to Hex   |")
+                        println("|  -error <code> => Show information about errors  |")
                         println("+--------------------------------------------------+")
                         return
                     }
@@ -102,9 +103,9 @@ fun main(args: Array<String>) {
                     if(args[i] == "-version")
                     {
                         println("+---------------------------------+")
-                        println("|      CommanderVM v$version       |")
+                        println("|      CommanderVM v$version     |")
                         println("+---------------------------------+")
-                        println("|   Version: $version              |")
+                        println("|   Version: $version            |")
                         if(build in 1..9)
                             println("|   Build:   $build                    |")
                         else if(build in 10..99)
@@ -192,6 +193,49 @@ fun main(args: Array<String>) {
                             outFile.writeText(out)
                         }
                         return
+                    }
+
+                    if(args[i] == "-error")
+                    {
+                        if(args.size > 1 && args[i+1].isNotEmpty())
+                        {
+                            when(args[i+1])
+                            {
+                                "P02" -> {
+                                    println("+---------------------------------+")
+                                    println("|    CommanderVM's Error Codes    |")
+                                    println("+---------------------------------+")
+                                    println("| P02 => Could not find register  |")
+                                    println("+---------------------------------+")
+                                }
+                                "P03" -> {
+                                    println("+---------------------------------+")
+                                    println("|    CommanderVM's Error Codes    |")
+                                    println("+---------------------------------+")
+                                    println("| P03 => Could not parse index    |")
+                                    println("+---------------------------------+")
+                                }
+                                else -> {
+                                    println("+---------------------------------+")
+                                    println("|    CommanderVM's Error Codes    |")
+                                    println("+---------------------------------+")
+                                    println("| '${args[i+1]}' => Error code not found!  |")
+                                    println("+---------------------------------+")
+                                }
+                            }
+
+                            Utils.exit(0,"")
+                        }
+                        else
+                        {
+                            println("+---------------------------------+")
+                            println("|    CommanderVM's Error Codes    |")
+                            println("+---------------------------------+")
+                            println("| P02 => Could not find register  |")
+                            println("| P03 => Could not parse index    |")
+                            println("+---------------------------------+")
+                            Utils.exit(0,"")
+                        }
                     }
                 }
                 else

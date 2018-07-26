@@ -62,6 +62,9 @@ class Utils {
         {
             when(type)
             {
+                0 -> {
+                    print("")
+                }
                 1 -> {
                     println("CommanderVM was Halted: Instruction;")
                 }

@@ -35,5 +35,8 @@ enum class InstructionSet(var hex: Int) {
     POP(0x03), // POP: 0x03,$a; Removes the top of register a
     JMP(0x04), // JMP: 0x04,0x00; Jumps top position 0 of applicationMemory
     JIF(0x05), // JIF: 0x05,0x00,$a; Jumps to position 0 of applicationMemory if top of register a is 1
+    JHE(0x06), // JHE: 0x06,$a,0x01,0x00; Jumps to position 0 of applicationMemory if top of $a is higher or equal to 1
+    JLE(0x07), // JLE: 0x07,$a,0x01,0x00; Jumps to position 0 of applicationMemory if top of $a is less or equal to 1
+    JIE(0x08), // JIE: 0x08,$a,0x01,0x00; Jumps to position 0 of applicationMemory if top of $a is equal to 1
     IGN(0xFF)  // IGN: 0xFF; Does nothing
 }

@@ -34,7 +34,17 @@ class Parser {
             return Instruction(InstructionSet.IGN)
         }
 
-        var set = line.split(",")
+        var s = line
+
+        if(line.contains("#"))
+        {
+            s = line.split("#")[0]
+        }else if(line.contains("//"))
+        {
+            s = line.split("//")[0]
+        }
+
+        var set = s.split(",")
 
         if (set.size == 1) {
             if (Utils.compareWithInstruction(set[0], InstructionSet.HLT))

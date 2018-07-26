@@ -45,13 +45,13 @@ class VM {
      * ApplicationMemory defines how many Instructions can be stored and execute
      */
     private var applicationMemoryMax: Int = 0
-    private var applicationMemory: MutableList<Instruction> = ArrayList<Instruction>()
+    private var applicationMemory: MutableList<Instruction> = ArrayList()
 
     /**
      * DataMemory defines how many Variabls can be stored
      */
     private var dataMemoryMax: Int = 0
-    private var dataMemory: MutableMap<String, Any> = HashMap<String, Any>()
+    private var dataMemory: MutableMap<String, Any> = HashMap()
 
     /**
      * JumpMax defines how often a JMP instruction can be executed
@@ -211,24 +211,6 @@ class VM {
         }
     }
 
-    fun dump(): String
-    {
-        var map = HashMap<String, Any>()
-        map["dataMemory"] = dataMemory
-        map["applicationMemory"] = applicationMemory
-        map["jmpCount"] = jmpCount
-        map["applicationStackBegin"] = applicationStackBegin
-        return Gson().toJson(map)
-    }
-
-    fun clear()
-    {
-        dataMemory.clear()
-        applicationMemory.clear()
-        jmpCount = 0
-        applicationStackBegin = 0
-    }
-
     /*
      * The following functions allow loading and clearing of the VM internal storages
      */
@@ -247,5 +229,23 @@ class VM {
     {
         dataMemoryMax=data_memory_max
         dataMemory=data_memory
+    }
+
+    fun Vm_Dump(): String
+    {
+        var map = HashMap<String, Any>()
+        map["dataMemory"] = dataMemory
+        map["applicationMemory"] = applicationMemory
+        map["jmpCount"] = jmpCount
+        map["applicationStackBegin"] = applicationStackBegin
+        return Gson().toJson(map)
+    }
+
+    fun Vm_Clear()
+    {
+        dataMemory.clear()
+        applicationMemory.clear()
+        jmpCount = 0
+        applicationStackBegin = 0
     }
 }

@@ -7,7 +7,7 @@ plugins {
 
 group = "at.atvg_studios.gitlab"
 // The Version is defined as Year-Month-Day<-Revision> (Revision is optional)
-version = "18.7.21"
+version = "18.7.26.1"
 var build = getBuildCode()
 
 repositories {

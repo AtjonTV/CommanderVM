@@ -19,8 +19,11 @@ The commands marked with `✕` are not implemented yet.
 ✔ PUT(0x01), // PUT: 0x01,$a,0x02; Puts 2 at the top of register a
 ✕ COM(0x02), // COM: 0x02,$a.2,$a.3,$a; Compares register a pos 2 with register a pos 3 and stores 0 or 1 at top of register a
 ✔ POP(0x03), // POP: 0x03,$a; Removes the top of register a
-✕ JMP(0x04), // JMP: 0x04,0x00; Jumps top position 0 of applicationMemory
+✔ JMP(0x04), // JMP: 0x00; Jumps top position 0 of applicationMemory
 ✕ JIF(0x05), // JIF: 0x05,0x00,$a; Jumps to position 0 of applicationMemory if top of register a is 0 or 1
+✕ JHE(0x06), // JHE: 0x06,$a,0x01,0x00; Jumps to position 0 of applicationMemory if top of $a is higher or equal to 1
+✕ JLE(0x07), // JLE: 0x07,$a,0x01,0x00; Jumps to position 0 of applicationMemory if top of $a is less or equal to 1
+✕ JIE(0x08), // JIE: 0x08,$a,0x01,0x00; Jumps to position 0 of applicationMemory if top of $a is equal to 1
 ✔ IGN(0xFF)  // IGN: 0xFF; Does nothing
 ```
 
